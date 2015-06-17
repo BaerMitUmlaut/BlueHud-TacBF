@@ -1,23 +1,37 @@
 private ["_unit", "_return"];
 
+#define __ICE_gear_Rifleman 0
+#define __ICE_gear_Grenadier 1
+#define __ICE_gear_MG 2
+#define __ICE_gear_Medic 3
+#define __ICE_gear_CombatEngineer 4
+#define __ICE_gear_LightAT 5
+#define __ICE_gear_HeavyAT 6
+#define __ICE_gear_AA 7
+#define __ICE_gear_Marksman 8
+#define __ICE_gear_Sniper 9
+#define __ICE_gear_SL 10
+#define __ICE_gear_Crewman 11
+#define __ICE_gear_Pilot 12
+#define __ICE_gear_Diver 13
+
 _unit = _this;
 
-_return = switch true do {
-	case (leader group _unit == _unit): {"SQL"};
-	case !(_unit getVariable ["BlueHud_Role", ""] == ""): {_unit getVariable ["BlueHud_Role", ""]};
-	case (getNumber(configFile >> "CfgVehicles" >> typeOf _unit >> "attendant") == 1): {"Medic"};
-	case !(secondaryWeapon _unit == ""): {"Rifleman AT"};
-	case (getText (configFile >> "CfgVehicles" >> typeOf _unit >> "Displayname") == "Autorifleman"
-			|| getText (configFile >> "CfgVehicles" >> typeOf _unit >> "Displayname") == "Machinegunner"
-			|| getNumber (configFile >> "CfgMagazines" >> currentMagazine _unit >> "count") > 99): {"Autorifleman"};
-	case (getNumber(configFile >> "CfgVehicles" >> typeOf _unit >> "engineer") == 1): {"Engineer"};
-	case (getText (configFile >> "CfgVehicles" >> typeOf _unit >> "Displayname") == "Explosive Specialist"): {"Explosive Specialist"};
-	case (getText (configFile >> "CfgVehicles" >> typeOf _unit >> "Displayname") == "Grenadier"
-			|| count getArray (configfile >> "CfgWeapons" >> primaryWeapon _unit >> "muzzles") > 1): {"Grenadier"};
-	case (getText (configFile >> "CfgVehicles" >> typeOf _unit >> "Displayname") == "Ammo Bearer"): {"Ammo Bearer"};
-	case (getText (configFile >> "CfgVehicles" >> typeOf _unit >> "Displayname") == "Marksman"
-			|| getText (configFile >> "CfgVehicles" >> typeOf _unit >> "Displayname") == "Sniper"): {"Marksman"};
-	case (getText (configFile >> "CfgVehicles" >> typeOf _unit >> "Displayname") == "JTAC"): {"JTAC"};
+_return = switch (_unit call ICE_fnc_gear_getCurrentRole) do {
+ 	case __ICE_gear_Rifleman: {"Rifleman"};
+	case __ICE_gear_Grenadier: {"Grenadier"};
+	case __ICE_gear_MG: {"Autorifleman"};
+	case __ICE_gear_Medic: {"Medic"};
+	case __ICE_gear_CombatEngineer: {"Engineer"};
+	case __ICE_gear_LightAT: {"Rifleman AT"};
+	case __ICE_gear_HeavyAT: {"Rifleman AT"};
+	case __ICE_gear_AA: {"Rifleman AT"};
+	case __ICE_gear_Marksman: {"Marksman"};
+	case __ICE_gear_Sniper: {"Marksman"};
+	case __ICE_gear_SL : {"SQL"};
+	case __ICE_gear_Crewman : {"Rifleman"};
+	case __ICE_gear_Pilot : {"Rifleman"};
+	case __ICE_gear_Diver : {"Rifleman"};
 	default {"Rifleman"};
 };
 

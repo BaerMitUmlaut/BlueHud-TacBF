@@ -8,38 +8,11 @@ private ["_eventHandler", "_realCenter", "_header", "_footer", "_drawSquad", "_d
 //stutter when I added custom HUD size and the real center thing below and
 //thankfully that doesn't happen anymore because of this function.
 
-if (BlueHUD_allowedHUDModes == 7) then {
-	_realCenter = BlueHudShift vectorAdd BlueHUDMapZero;
-} else {
-	switch (true) do {
-		//If user settings complies with the server settings, leave them as is.
-		case (BlueHUD_allowedHUDModes >= 4 && (BlueHudShift select 1) == 20): {_realCenter = BlueHudShift vectorAdd BlueHUDMapZero};
-		case (floor(BlueHUD_allowedHUDModes/2) == 1 && (BlueHudShift select 1) == 10): {_realCenter = BlueHudShift vectorAdd BlueHUDMapZero};
-		case (floor(BlueHUD_allowedHUDModes/2) == 3 && (BlueHudShift select 1) == 10): {_realCenter = BlueHudShift vectorAdd BlueHUDMapZero};
-		case ((BlueHUD_allowedHUDModes mod 2) == 1 && (BlueHudShift select 1) == 0): {_realCenter = BlueHudShift vectorAdd BlueHUDMapZero};
-		default {
-		//Else pick the highest allowed setting.
-			switch (true) do {
-				case (BlueHUD_allowedHUDModes >= 4): {
-					_realCenter = [0,20,0] vectorAdd BlueHUDMapZero;
-				};
-				case (BlueHUD_allowedHUDModes >= 2): {
-					_realCenter = [0,10,0] vectorAdd BlueHUDMapZero;
-				};
-				case (BlueHUD_allowedHUDModes >= 1): {
-					_realCenter = [0,0,0] vectorAdd BlueHUDMapZero;
-				};
-				default {
-					_realCenter = [0,0,0] vectorAdd BlueHUDMapZero;
-				};
-			};
-		};
-	};
-};
 
-_iconSizeBig = ((BlueHudSettings select 5) - 0.04) / 0.06 * 5 + 15;
-_iconSizeSmall = ((BlueHudSettings select 5) - 0.04) / 0.06 * 4.5 + 13.5;
+_realCenter = [0,20,0] vectorAdd BlueHUDMapZero;
 
+_iconSizeBig = 15.8;
+_iconSizeSmall = 14.3;
 
 _header = "if (alive player && vehicle player == player) then {";
 _footer = "};";
@@ -80,15 +53,6 @@ _drawCompass = format ["if ('ItemCompass' in assignedItems player) then {
 	(uiNamespace getVariable 'BlueHudMap') drawIcon ['BlueHud\UI\South.paa', [1,1,1,BlueHudCurrentAlpha], ([[0,18,0], ([] call BlueHud_fnc_getEyeDir)] call BlueHud_fnc_vectorRotate) vectorAdd %1, %2, %2, (([] call BlueHud_fnc_getEyeDir) * -1), '', false];
 };", _realCenter, _iconSizeBig];
 
-//Handles HUD fade-out
-_fade = "if (visibleMap) then {
-	BlueHudCurrentAlpha = 0;
-} else {
-	if (time - BlueHudLastUnfade > 5) then {
-		BlueHudCurrentAlpha = 0 max (BlueHudLastUnfade + 5.8 - time) * (((sunOrMoon max 0.1) + currentVisionMode player) min 1);
-	};
-};";
-
 //Handles HUD Alpha depending on daylight
 _dim = "if (visibleMap) then {
 	BlueHudCurrentAlpha = 0;
@@ -98,25 +62,13 @@ _dim = "if (visibleMap) then {
 
 _eventHandler = _header;
 
-if (BlueHudSettings select 4) then {
-	_eventHandler =  _eventHandler + _fade;
-} else {
-	_eventHandler =  _eventHandler + _dim;
-};
+_eventHandler =  _eventHandler + _dim;
 
-if !(BlueHudSettings select 1) then {
-	_eventHandler = _eventHandler + _drawProximity;
-} else {
-	_eventHandler = _eventHandler + _drawSquad;
-};
+_eventHandler = _eventHandler + _drawProximity;
 
-if (BlueHudSettings select 2) then {
-	_eventHandler = _eventHandler + _drawPlayer;
-};
+_eventHandler = _eventHandler + _drawPlayer;
 
-if (BlueHudSettings select 0 && BlueHUD_allowCompass) then {
-	_eventHandler =  _eventHandler + _drawCompass;
-};
+_eventHandler =  _eventHandler + _drawCompass;
 
 _eventHandler =  _eventHandler + _footer;
 
