@@ -1,12 +1,12 @@
 class CfgPatches {
-	class BlueHud {
+	class BlueHudTacBF {
 		units[] = {};
 		weapons[] = {};
 		requiredVersion = 1.1;
 		requiredAddons[] = {"CBA_Main"};
-		version = "1.11";
-		versionStr = "1.11";
-		versionAr[] = {1,11,0};
+		version = "1.0";
+		versionStr = "1.0";
+		versionAr[] = {1,0,0};
 		author[] = {"BaerMitUmlaut"};
 		authorUrl = "https://github.com/BaerMitUmlaut";
 	};
@@ -15,7 +15,7 @@ class CfgPatches {
 class CfgFunctions {
 	class BlueHud {
 		class BlueHud {
-			file = "BlueHud\functions";
+			file = "BlueHud-TacBF\functions";
 			class initHud {postInit = 1;};
 			class getRole {};
 			class vectorRotate {};
