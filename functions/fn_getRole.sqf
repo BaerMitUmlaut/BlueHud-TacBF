@@ -17,6 +17,10 @@ private ["_unit", "_return"];
 
 _unit = _this;
 
+//For testing and debugging
+if (isNil "ICE_fnc_gear_getCurrentRole") then {
+	ICE_fnc_gear_getCurrentRole = {0};
+};
 _return = switch (_unit call ICE_fnc_gear_getCurrentRole) do {
  	case __ICE_gear_Rifleman: {"Rifleman"};
 	case __ICE_gear_Grenadier: {"Grenadier"};
